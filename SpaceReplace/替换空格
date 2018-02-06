@@ -1,0 +1,47 @@
+/**题目描述：
+请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+**/
+/*解决方法一：
+由于题目所给出的字符串是StringBuffer类型，则考虑使用该类所拥有的方法replace(start,end,str)，start-起始索引（包含），end-结束索引（不包含）。接下来就
+比较容易，找到字符串中空格的位置spaceindex进行替换即可（使用indexOf()函数）。
+*/
+public class Solution {
+    public String replaceSpace(StringBuffer str) {
+    	while(str.indexOf(" ")!=-1){
+            int spaceindex=str.indexOf(" ");
+            str.replace(spaceindex,spaceindex+1,"%20");
+        }
+        return str.toString();
+    }
+}
+/*解决方法二：
+不考虑现有的replace()函数。如果从前往后进行字符的替换，假设字符串的长度为n，每有一个空格，则需要向后移O(n)个字符，如果有n个空格则时间复杂度为O(n^2)。
+如果从后往前进行替换，所有的字符只需往后移一次，时间复杂度为O(n)。首先准备两个指针，一个（P1）指向原字符串的尾部，另一个（P2）指向新字符串的尾部（新字符
+串的长度=原字符串长度+空格数*（替换字符长度-1）），每碰到一个空格，P1向前移动一格，P2之前填充替换字符，直到两个指针相遇。
+*/
+public class Solution {
+    public String replaceSpace(StringBuffer str) {
+    	int originalLength=str.length();//字符串原始长度
+        int spacenum=0;//空格数目
+        for(int i=0;i<originalLength;i++){
+            if(str.charAt(i)==' ')
+                spacenum++;
+        }
+        int newLength=originalLength+spacenum*2;//新字符串的长度
+        str.setLength(newLength);//设置字符串的新长度
+        int originalIndex=originalLength-1;//指向原始字符串的尾部
+        int newIndex=newLength-1;//指向新字符串的尾部
+        while(originalIndex>=0&&originalIndex<newIndex){
+            if(str.charAt(originalIndex)==' '){
+                str.setCharAt(newIndex--,'0');
+                str.setCharAt(newIndex--,'2');
+                str.setCharAt(newIndex--,'%');
+            }
+            else{
+                str.setCharAt(newIndex--,str.charAt(originalIndex));
+            }
+            originalIndex--;
+        }
+        return str.toString();
+    }
+}
