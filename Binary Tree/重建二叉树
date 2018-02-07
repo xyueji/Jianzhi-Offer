@@ -1,0 +1,58 @@
+/**问题描述：
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和
+中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+**/
+/*解决方法：
+首先在前序遍历序列中找到根节点，然后在中序遍历序列中确定根节点的位置，根节点左边的为左子树，根节点的右边为右子树。也就是说，左右子树可以重复上述过程，可
+以用递归调用的方式完成。
+**/
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
+        if(pre.length<=0||in.length<=0||pre.length!=in.length)//判断前序遍历序列和中序遍历序列是否为空或长度不相符
+            return null;
+        else
+        {
+            return ConstructTree(pre,in,0,pre.length-1,0,in.length-1);
+        }
+    }
+    public TreeNode ConstructTree(int [] pre,int [] in,int preStart,int preEnd,int inStart,int inEnd){
+        //在前序遍历序列中选择根节点
+        int rootValue=pre[preStart];
+        TreeNode root=new TreeNode(rootValue);
+        root.left=root.right=null;
+        if(preStart==preEnd){//返回最后一个节点
+            if(inStart==inEnd&&in[inStart]==pre[preStart])//判断对吼一个节点是否合理
+                return root;
+            else
+                return null;
+        }
+        //找到在中序遍历序列中的根节点
+        int findInRoot=inStart;
+        while(findInRoot<=inEnd&&in[findInRoot]!=rootValue){
+            findInRoot++;
+        }
+        if(in[findInRoot]!=rootValue&&findInRoot==inEnd)
+            return null;
+        int leftLength=findInRoot-inStart;
+        int leftPreEnd=preStart+leftLength;
+        if(leftLength>0){
+            //构建左子树
+            root.left=ConstructTree(pre,in,preStart+1,leftPreEnd,inStart,findInRoot-1);
+        }
+        if(leftLength<preEnd-preStart)
+        {
+            //构建右子树
+            root.right=ConstructTree(pre,in,leftPreEnd+1,preEnd,findInRoot+1,inEnd);
+        }
+        return root;
+    }
+}
