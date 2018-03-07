@@ -1,0 +1,40 @@
+/**问题描述
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。 输入一个非递减排序的数组的一个旋转，输出旋转数组的最小元素。例如数组{3,4,5,1,2}
+为{1,2,3,4,5}的一个旋转，该数组的最小值为1。 NOTE：给出的所有元素都大于0，若数组大小为0，请返回0。
+**/
+/*解决方法：
+采用二分法的思想，旋转数组一般情况下第一个元素大于最后一个元素，当中间元素大于等于第一个元素则说明最小元素在后面，当中间元素小于等于最后一个元素则说明最小元素在
+前面。用两个指针指向首和尾，当两指针相遇（两者之间距离为1），最小元素为第二个指针所指向的元素。
+特例：旋转矩阵0个元素放到尾部的情况下第一个元素即为最小元素。当首尾元素和中间元素三者相等时（{1,0,1,1,1},{1,1,1,0,1}），则需要使用遍历查找的方法。
+*/
+import java.util.ArrayList;
+public class Solution {
+    public int minNumberInRotateArray(int [] array) {
+        int start=0;
+        int end=array.length-1;
+        int mid=start;//0个元素搬到数组尾部的情况
+        while(array[start]>=array[end]){
+            if(end-start==1){
+                mid=end;//最小元素即为指向end的元素
+                break;
+            }
+            mid=(start+end)/2;
+            if(array[mid]==array[start]&&array[mid]==array[end]){//中间元素、第一个元素、第二个元素三者相等
+                return minFind(array,start,end);
+            }else if(array[mid]>=array[start]){
+                start=mid;
+            }else if(array[mid]<=array[end]){
+                end=mid;
+            }
+        }
+        return array[mid];
+    }
+    public int minFind(int [] array,int start,int end){//从start和end之间查找数组最小元素
+        int min=array[start];
+        for(int i=start+1;i<=end;i++){
+            if(min>array[i])
+                min=array[i];
+        }
+        return min;
+    }
+}
