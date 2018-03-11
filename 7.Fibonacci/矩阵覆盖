@@ -1,0 +1,23 @@
+/**问题描述
+我们可以用2*1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2*1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？
+**/
+/**解决方法
+当2*1的小矩阵竖着放在最左边时，右边还剩2*(n-1)的区域。当2*1的小矩阵横着放在最左边时，右边还剩2*(n-2)的区域。因此，f(n)=f(n-1)+f(n-2)，属于菲波那切数
+列的问题。采用递归或循环（推荐）的方法。
+**/
+public class Solution {
+    public int RectCover(int target) {
+        int [] result={0,1,2};
+        if(target<3)
+            return result[target];
+        int a1=1;
+        int a2=2;
+        int an=0;
+        for(int i=3;i<=target;i++){
+            an=a1+a2;
+            a1=a2;
+            a2=an;
+        }
+        return an;
+    }
+}
