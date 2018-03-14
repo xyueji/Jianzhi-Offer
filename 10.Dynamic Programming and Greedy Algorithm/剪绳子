@@ -1,0 +1,56 @@
+/**问题描述
+给你一根长度为n的绳子，请把绳子剪成m段 (m和n都是整数，n>1并且m>1)每段绳子的长度记为k[0],k[1],...,k[m].请问k[0]*k[1]*...*k[m]可能的最大乘积是多少？
+例如，当绳子的长度为8时，我们把它剪成长度分别为2,3,3的三段，此时得到的最大乘积是18.
+**/
+/*解决方法
+方法一：
+动态规划：求最优解；整体问题的最优解是依赖于各个子问题的最优解；把大问题分为若干个小问题，这些小问题之间还有相互重叠的更小的子问题；从上往下分析问题，从
+下往上解决问题（避免重复求解子问题）。
+思路：首先定义函数f(n)为把长度为n的绳子剪成若干段后各段长度乘积的最大值。在剪第一刀时，我们有n-1种选择，也就是说第一段绳子的可能长度分别为1,2,3.....，
+n-1。因此f(n)=max(f(i)*f(n-i))，其中0<i<n。
+这是一个自上而下的递归公式。由于递归会有大量的不必要的重复计算。一个更好的办法是按照从下而上的顺序计算，也就是说我们先得到f(2),f(3)，再得到f(4),f(5)，
+直到得到f(n)。当绳子的长度为2的时候，只能剪成长度为1的两段，所以f(2) = 1，当n = 3时，容易得出f(3) = 2;
+*/
+public int dynamicProgramming(int length){
+  if(length<2)
+      return 0;
+  if(length==2)
+      return 1;
+  if(length==3)
+      return 2;
+  int [] product=new int[length+1];
+  product[0]=0;
+  product[1]=1;
+  product[2]=2;
+  product[3]=3;
+  /**当length>3时,不能对3进行剪开，因为无论怎么剪，各段乘积都小于3。而大于3的绳子剪开长度的乘积总是大于或等于本身。product[1]、
+		product[2]、product[3]为长度大于3的绳子提供运算**/
+  int max=0;
+  for(int i=4;i<=length;i++){
+    max=0;
+    for(int j=1;j<=i/2;j++){
+        int p=product[j]*product[i-j];
+        if(max<p)
+          max=p;
+        product[i]=max;
+    }
+  }
+  return product[length];
+}
+/**方法二：
+贪婪算法：如果我们按照如下的策略来剪绳子，则得到的各段绳子的长度乘积将最大：当n>=5时，我们尽可能多地剪长度为3的绳子；当剩下绳子长度为4时，把绳子剪成
+两段长度为2的绳子。
+**/
+public int greedyAlgorithm(int length){
+  if(length<2)
+      return 0;
+  if(length==2)
+      return 1;
+  if(length==3)
+      return 2;
+  int timeOf3=length/3;
+  if(length-timeOf3*3==1)
+    timeOf3=timeOf3-1;
+  int timeOf2=(length-timeOf3*3)/2;
+  return (int)Math.pow(3,timeOf3)*(int)Math.pow(2,timeOf2);
+}
