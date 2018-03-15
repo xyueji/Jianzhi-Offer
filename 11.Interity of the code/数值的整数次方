@@ -1,0 +1,54 @@
+/**问题描述
+给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+**/
+/*解决方法：
+全面但不高效的方法:先算指数大于等于0的情况，再算底数不等于0的情况，最后算底数等于0且指数小于0的情况。
+*/
+public class Solution {
+    public double Power(double base, int exponent) throws Exception{
+        double p=1.0;
+        if(exponent>=0){
+            while(exponent!=0){
+                p*=base;
+                exponent--;
+            }
+        }else if(base!=0){
+            while(exponent!=0){
+                p*=1/base;
+                exponent++;
+            }
+        }else{
+            throw new Exception("分母为0！");
+        }
+        return p;
+  }
+}
+/*全面且高效的方法：当指数为偶数时，a^n=a^(n/2)*a^(n/2)；当指数为奇数时，a^n=a^((n-1)/2)*a^((n/2)/2)*a;采用递归的方法，注意：==的优先级大于&*/
+public class Solution {
+    private static boolean invalidInput=false;
+    public static double Power(double base, int exponent) throws Exception{
+        invalidInput=false;
+        if(base==0&&exponent<0){
+            invalidInput=true;
+            return 0.0;
+        }
+        int absExponent=exponent;
+        if(exponent<0)
+            absExponent=-absExponent;
+        double result=PowerUnsigned(base,absExponent);
+        if(exponent<0)
+            result=1/result;
+        return result;
+  }
+  public static double PowerUnsigned(double base,int absExponent){
+      if(absExponent==0)
+          return 1.0;
+      if(absExponent==1)
+          return base;
+      double result=PowerUnsigned(base,absExponent>>1);
+      result*=result;
+      if((absExponent&1)==1)
+          result*=base;
+      return result;
+  }
+}
