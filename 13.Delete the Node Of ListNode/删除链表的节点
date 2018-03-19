@@ -14,6 +14,7 @@ public class ListNode{
 		this.value=value;
 	}
 }
+import java.util.Stack;
 public class DeleteNode{
 	public ListNode first;
 	public ListNode deleteNode(ListNode first,ListNode p){//删除某节点
@@ -37,4 +38,57 @@ public class DeleteNode{
 		}
 		return first;
 	}
-  }
+	public void addNode(int data){
+		ListNode temp=new ListNode(data);
+		temp.pNext=first;
+		first=temp;
+	}
+	public ListNode findIndex(int data){//查找某节点
+		ListNode p=new ListNode();
+		p=first;
+		while(p!=null){
+			if(p.value==data){
+				break;
+			}
+			p=p.pNext;
+		}
+		return p;
+	}
+	/*public void printListNode(ListNode p){//从尾到头打印节点
+		ListNode p1=new ListNode();
+		p1=p;
+		Stack<ListNode> stack=new Stack<ListNode>();
+		while(p1!=null){
+			stack.push(p1);
+			p1=p1.pNext;
+		}
+		while(!stack.isEmpty()){
+			ListNode l=stack.pop();
+			System.out.println(l.value);
+		}
+	}*/
+	public void printListNode(ListNode p){//从尾到头打印节点
+		ListNode p1=new ListNode();
+		p1=p;
+		if(p1!=null){
+			if(p1.pNext!=null){
+				printListNode(p1.pNext);
+			}
+			System.out.println(p1.value);
+		}
+	}
+}
+public class test{
+	public static void main(String[] args){
+		DeleteNode del=new DeleteNode();
+		for(int i=0;i<8;i++){
+			del.addNode(i+1);
+		}
+		ListNode p=del.findIndex(4);
+		del.printListNode(del.first);
+		del.deleteNode(del.first,p);
+		del.printListNode(del.first);
+	}
+}	
+			
+		
