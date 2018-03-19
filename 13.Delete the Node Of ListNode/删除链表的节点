@@ -1,0 +1,40 @@
+/**问题描述
+在时间复杂度为O(1)的条件内删除链表节点。
+**/
+/*解决方法：
+题目要求时间复杂度为O(1)。假设要删除节点i，则节点i的下一个节点j的内容覆盖i的内容，i的下一个节点指向j的下一个节点，删除j节点就可完成。
+*/
+public class ListNode{
+	int value;
+	ListNode pNext=null;
+	ListNode(){
+		value=0;
+	}
+	ListNode(int value){
+		this.value=value;
+	}
+}
+public class DeleteNode{
+	public ListNode first;
+	public ListNode deleteNode(ListNode first,ListNode p){//删除某节点
+		if(first==null||p==null)
+			return null;
+		if(p.pNext!=null){
+			ListNode l=new ListNode();
+			l=p.pNext;
+			p.value=l.value;
+			p.pNext=l.pNext;
+		}else if(first==p){
+			first=null;
+			p=null;
+		}else{
+			ListNode l=new ListNode();
+			l=first;
+			while(l.pNext!=null){
+				l=l.pNext;
+			}
+			l.pNext=null;
+		}
+		return first;
+	}
+  }
