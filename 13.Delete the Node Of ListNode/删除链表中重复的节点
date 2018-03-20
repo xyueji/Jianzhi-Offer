@@ -1,0 +1,103 @@
+/**问题描述
+在一个排序的链表中，如何删除重复的节点。比如1、2、3、4、5、5、5、6，删除后为1、2、3、4、6。
+**/
+/*解决方法*/
+public class ListNode{
+	int value;
+	ListNode pNext=null;
+	ListNode(){
+		value=0;
+	}
+	ListNode(int value){
+		this.value=value;
+	}
+}
+import java.util.Stack;
+public class DeleteNode{
+	public ListNode first;
+	public ListNode deleteNode(ListNode head){//删除重复节点
+		if(head==null)
+			return null;
+		ListNode preNode=null;
+		ListNode pNode=head;
+		while(pNode!=null){
+			ListNode pNext=pNode.pNext;
+			boolean Del=false;
+			if(pNext!=null&&pNode.value==pNext.value)
+				Del=true;
+			if(!Del){
+				preNode=pNode;
+				pNode=pNode.pNext;
+			}
+			else{
+				ListNode delNode=pNode;
+				int value=pNode.value;
+				while(delNode!=null&&delNode.value==value){
+					pNext=delNode.pNext;
+					delNode=null;
+					delNode=pNext;
+				}
+				if(preNode==null)
+					head=pNext;
+				else
+					preNode.pNext=pNext;
+				pNode=pNext;
+			}
+		}
+		return head;
+	}
+	public void addNode(int data){
+		ListNode temp=new ListNode(data);
+		temp.pNext=first;
+		first=temp;
+	}
+	public ListNode findIndex(int data){//查找某节点
+		ListNode p=new ListNode();
+		p=first;
+		while(p!=null){
+			if(p.value==data){
+				break;
+			}
+			p=p.pNext;
+		}
+		return p;
+	}
+	/*public void printListNode(ListNode p){//从尾到头打印节点
+		ListNode p1=new ListNode();
+		p1=p;
+		Stack<ListNode> stack=new Stack<ListNode>();
+		while(p1!=null){
+			stack.push(p1);
+			p1=p1.pNext;
+		}
+		while(!stack.isEmpty()){
+			ListNode l=stack.pop();
+			System.out.println(l.value);
+		}
+	}*/
+	public void printListNode(ListNode p){//从尾到头打印节点
+		ListNode p1=new ListNode();
+		p1=p;
+		if(p1!=null){
+			if(p1.pNext!=null){
+				printListNode(p1.pNext);
+			}
+			System.out.println(p1.value);
+		}
+	}
+}
+public class test{
+	public static void main(String[] args){
+		DeleteNode del=new DeleteNode();
+		for(int i=0;i<5;i++){
+			del.addNode(i+1);
+		}
+		del.addNode(5);
+		del.addNode(5);
+		del.addNode(6);
+		ListNode p=del.findIndex(4);
+		del.printListNode(del.first);
+		del.deleteNode(del.first);
+		del.printListNode(del.first);
+	}
+}
