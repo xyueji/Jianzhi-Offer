@@ -1,0 +1,49 @@
+/**问题描述
+*请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串“+100”、“5e2”、“-123”、“3.1416”以及“-1E-16”都表示数值，但“12e”、“1a.3.14”、
+*“1.2.3”、“+-5”以及“12e+5.4”都不是。
+**/
+/**解决方法
+*表示数值的字符串遵循模式A[.[B]][e|EC]或者.B[e|C]，其中A为数值的整数部分，B紧跟着小数点为数值的小数部分，C紧跟着'e'或者'E'为数值的指数部分。首先判断
+*'+'或'-'，扫描A到达'.'；扫描B到达'e'或'E',判断'+'或'-'和C。
+**/
+public class test{
+	private static int index=0;
+	public static void main(String[] args){
+		char[] str={'1','.','4','e','6'};
+		char[] str1={'1','2','e','+','5','.','4'};
+		System.out.println(isNum(str));
+		System.out.println(isNum(str1));
+	}
+	public static boolean isNum(char[] str){
+		index=0;
+		boolean numric=scanNum(str);
+		//如果出现'.'，则接下来是数字的小数部分
+		if(str[index]=='.'){
+			index++;
+			//为什么使用'||'
+			//1.小数可以没有整数部分，.123
+			//2.小数可以没有小数部分，1.
+			//3.小数既可以有整数部分，有也可以有小数部分，1.123
+			numric=scanUnsignNum(str)||numric;
+		}
+		if(str[index]=='e'||str[index]=='E'){
+			index++;
+			//为什么使用'&&'
+			//1.当e或E之前没有数字时，不能表示数。e1
+			//2.当e或E之后没有数字时，不能表示数。2e
+			numric=numric&&scanNum(str);
+		}
+		return numric&&index==str.length;
+	}
+	public static boolean scanNum(char[] str){
+		if(str[index]=='+'||str[index]=='-')
+			index++;
+		return scanUnsignNum(str);
+	}
+	public static boolean scanUnsignNum(char[] str){
+		int flag=index;
+		while(index<str.length&&str[index]>='0'&&str[index]<='9')
+			index++;
+		return index>flag;
+	}
+}
