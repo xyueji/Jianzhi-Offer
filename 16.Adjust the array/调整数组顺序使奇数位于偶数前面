@@ -1,0 +1,60 @@
+/**问题描述
+*输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数
+*之间的相对位置不变。
+**/
+/**解决方法**/
+import java.util.Scanner;
+public class test{
+	public static void main(String[] args){
+		Scanner scanner=new Scanner(System.in);
+		int n=scanner.nextInt();
+		int[] a=new int[n];
+		for(int i=0;i<n;i++){
+			a[i]=scanner.nextInt();
+		}
+		test t=new test();
+		t.reOrderArray(a);
+		for(int i=0;i<n;i++){
+			System.out.println(a[i]);
+		}
+	}
+	//不考虑数字的相对位置
+	/*public void reOrderArray(int [] array) {
+        if(array.length<=1)
+			return;
+		int start=0;
+		int end=array.length-1;
+		while(start<end){
+			while(start<end&&(array[start]&0x1)==1)
+				start++;
+			while(start<end&&(array[end]&0x1)==0)
+				end--;
+			if(start<end){
+				int temp=array[start];
+				array[start]=array[end];
+				array[end]=temp;
+			}
+		}
+    }*/
+	//考虑数字的相对位置，新建一个数组
+	public void reOrderArray(int [] array) {
+        if(array.length<=1)
+			return;
+		int p1=0;
+		int p2=0;
+		int[] a=new int[array.length];
+		for(int i=0;i<array.length;i++)
+		{
+			if((array[i]&1)==1)
+				p2++;
+		}
+		for(int i=0;i<array.length;i++){
+			if((array[i]&1)==0)
+				a[p2++]=array[i];
+			else
+				a[p1++]=array[i];
+		}
+		for(int i=0;i<array.length;i++)
+			array[i]=a[i];
+    }
+}
