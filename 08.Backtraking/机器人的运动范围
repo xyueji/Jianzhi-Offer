@@ -1,0 +1,46 @@
+/**问题描述
+地上有一个m行n列的方格。一个机器人从坐标(0,0)的格子开始移动，它每次可以向左、右、上、下移动一格，但不能进入行坐标和列坐标的位数之和大于k的格子。例如，当
+k=18时，机器人可以进入(35,37),因为3+5+3+7=18。但它不能进入(35,38)，因为3+5+3+8=19>18。请问该机器人能够到达多少个格子。
+**/
+/*解决方法
+由于机器人可以向左、右、上、下移动一格，所以可以采用回溯法。
+*/
+public class Moving{
+	public static void main(String[] args){
+		System.out.println(MovingCount(90,100,18));
+	}
+	public static int MovingCount(int rows,int cols,int k){
+		if(rows<=0&&cols<=0&&k<=0){
+			return 0;
+		}
+		boolean [] visited=new boolean[rows*cols];
+		int count=MovingCountCore(rows,cols,0,0,k,visited);
+		return count;
+	}
+	public static int MovingCountCore(int rows,int cols,int row,int col,int k,boolean [] visited){
+		int count=0;
+		if(check(rows,col,row,col,k,visited)){
+			count=1+MovingCountCore(rows,cols,row-1,col,k,visited)+
+				MovingCountCore(rows,cols,row,col-1,k,visited)+
+				MovingCountCore(rows,cols,row+1,col,k,visited)+
+				MovingCountCore(rows,cols,row,col+1,k,visited);
+		}
+		return count;
+	}
+	public static boolean check(int rows,int cols,int row,int col,int k,boolean[] visited){
+		if(row>=0&&col>=0&&row<=rows&&col<=cols&&(getSum(row)+getSum(col))<=k&&!visited[row*cols+col]){
+			visited[row*cols+col]=true;
+			return true;
+		}
+		else
+			return false;
+	}
+	public static int getSum(int num){
+		int sum=0;
+		while(num!=0){
+			sum+=num%10;
+			num=num/10;
+		}
+		return sum;
+	}
+}

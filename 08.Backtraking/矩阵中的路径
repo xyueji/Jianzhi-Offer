@@ -1,0 +1,46 @@
+/**问题描述
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以是矩阵中的任意一个开始，每一步可以在矩阵中向左、右、上下移动一格。如
+果一条路径经过了矩阵的某一格，则该路径不能再次进入该格子。
+**/
+/*解决方法：
+采用回朔法，通常回朔法适合用递归代码来实现。当我们到达某一格节点时，尝试所有可能的选项并在满足条件的前提下递归地抵达下一个节点。
+*/
+public class Backtraking{
+  public static void main(String[] args){
+      String str="bfce";
+      char[][] matrix={{'a','b','t','g'},{'c','f','c','s'},{'j','d','e','h'}};
+      System.out.println(hasPath(matrix,3,4,str));
+  }
+  public static boolean hasPath(char[][] matrix,int rows,int cols,String str){
+      if(rows<=0||cols<=0||str.length()<0)
+          return false;
+      char[] s=str.toCharArray();
+      boolean[] visited=new boolean[rows*cols];
+      int pathIndex=0;
+      for(int i=0;i<rows;i++)
+        for(int j=0;j<cols;j++){
+          if(hasPathCore(matrix,rows,cols,i,j,s,pathIndex,visited)){
+              return true;
+           }
+        }
+      return false;
+  }
+  public static boolean hasPathCore(char[][] matrix,int rows,int cols,int row,int col,char[] s,int pathIndex,boolean[] visited){
+      if(pathIndex==s.length-1)
+          return true;
+      boolean haspath=false;
+      if(row>=0&&col>=0&&row<rows&&col<cols&&s[pathIndex]==matrix[row][col]&&!visited[row*cols+col]){
+        pathIndex++;
+        visited[row*cols+col]=true;
+        haspath=hasPathCore(matrix,rows,cols,row,col-1,s,pathIndex,visited)||
+                hasPathCore(matrix,rows,cols,row-1,col,s,pathIndex,visited)||
+                hasPathCore(matrix,rows,cols,row,col+1,s,pathIndex,visited)||
+                hasPathCore(matrix,rows,cols,row+1,col,s,pathIndex,visited);
+        if(!haspath){
+            pathIndex--;
+            visited[row*cols+col]=false;
+         }
+      }
+     return haspath;
+ }
+}    
