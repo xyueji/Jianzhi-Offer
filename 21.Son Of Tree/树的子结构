@@ -1,0 +1,42 @@
+/**问题描述
+*输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+**/
+/**解决方法
+*第一步：在树A中找到和树B的根节点的值一样的节点R；第二步，判断树A中以R为根节点的子树是不是包含和树B一样的结构。
+**/
+/**
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+public class Solution {
+    public boolean HasSubtree(TreeNode root1,TreeNode root2) {
+        boolean result=false;
+        if(root1!=null&&root2!=null){
+            if(root1.val==root2.val)
+                result=this.hasSonTree(root1,root2);
+            if(!result)
+                result=HasSubtree(root1.left,root2);
+            if(!result)
+                result=HasSubtree(root1.right,root2);
+        }
+        return result;
+    }
+    public boolean hasSonTree(TreeNode root1,TreeNode root2){
+        if(root2==null)//必须把root2的判断条件放在前面，否则在判断成功后，会返回错误的结果
+            return true;
+        if(root1==null)
+            return false;
+        if(root1.val!=root2.val)
+            return false;
+        return hasSonTree(root1.left,root2.left)&&hasSonTree(root1.right,root2.right);
+    }
+}
