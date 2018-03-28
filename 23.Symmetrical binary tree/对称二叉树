@@ -1,0 +1,18 @@
+/**问题描述
+*请实现一个函数，用来判断一棵二叉树是不是对称的。如果一个二叉树和它的镜像一样，那么它就是对称的。
+**/
+/**解决方法
+*通过比较二叉树的前序遍历序列和对称前序遍历序列来判断二叉树是不是对称的。
+**/
+public boolean isSymmetrical(TreeNode root){
+    return this.isSymmetrical(root,root);
+}
+public boolean isSymmetrical(TreeNode pRoot1,TreeNode pRoot2){
+    if(pRoot1==null&&pRoot2==null)
+        return true;
+    if(pRoot1==null||pRoot2==null)
+        return false;
+    if(pRoot1.val!=pRoot2.val)
+        return false;
+    return isSymmetrical(pRoot1.left,pRoot2.right)&&isSymmetrical(pRoot1.right,pRoot2.left);
+}
